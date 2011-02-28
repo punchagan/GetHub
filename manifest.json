@@ -1,0 +1,13 @@
+{
+  "name": "GetHub",
+  "version": "0.5",
+  "description": "Displays pop-ups for new updates in your Github NewsFeed",
+  "icons": { "48": "octocat-chrome.png" },
+  "options_page": "options.html",
+  "background_page": "background.html",
+  "permissions": [
+    "tabs", 
+    "notifications",
+    "https://github.com/*"
+  ]
+}

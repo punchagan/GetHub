@@ -1,0 +1,115 @@
+<!--
+An option page for configuring GetHub.
+
+Copyright (C) 2011 Puneeth Chaganti <punchagan+gethub@gmail.com>
+Copyright (C) 2011 Thomas Stephen Lee <lee.iitb@gmail.com>
+
+This file is part of GetHub.
+
+GetHub is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+GetHub is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License
+along with GetHub.  If not, see <http://www.gnu.org/licenses/>.
+
+A portion of the code in this file is based on chrome's sample
+extension, notifications, available at
+http://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/api/notifications/
+whose license is available at 
+http://code.google.com/google_bsd_license.html
+-->
+
+<title>Notification Demo</title>
+<style>
+  /* Clone the look and feel of "chrome://" pages. */
+  body {
+    margin: 10px;
+    font: 84% Arial, sans-serif
+  }
+
+  h1 { font-size: 156% }
+
+  h1 img {
+    margin: 1px 5px 0 1px;
+    vertical-align: middle
+  }
+
+  h2 {
+    border-top: 1px solid #9cc2ef;
+    background-color: #ebeff9;
+    padding: 3px 5px;
+    font-size: 100%
+  }
+</style>
+<script>
+  /*
+    Grays out or [whatever the opposite of graying out is called] the option
+    field.
+  */
+  function ghost(isDeactivated) {
+    options.style.color = isDeactivated ? 'graytext' : 'black';
+                                                // The label color.
+    options.frequency.disabled = isDeactivated; // The control manipulability.
+  }
+
+  onload = function() {
+    // Initialize the option controls.
+    options.isActivated.checked = JSON.parse(localStorage.isActivated);
+                                           // The display activation.
+    options.frequency.value = localStorage.frequency;
+                                           // The display frequency, in minutes.
+    options.login.value = localStorage.login; // The user's login.
+    options.token.value = localStorage.token; // The user's token.
+
+    if (!options.isActivated.checked) { ghost(true); }
+
+    // Set the display activation and frequency.
+    options.isActivated.onchange = function() {
+      localStorage.isActivated = options.isActivated.checked;
+      ghost(!options.isActivated.checked);
+    };
+
+    options.frequency.onchange = function() {
+      localStorage.frequency = options.frequency.value;
+    };
+
+    options.login.onchange = function() {
+      localStorage.login = options.login.value;
+    };
+
+    options.token.onchange = function() {
+      localStorage.token = options.token.value;
+    };
+  };
+</script>
+<h1>
+  <img src="octocat-chrome.png" alt="GetHub">
+  Notification Demo
+</h1>
+<h2>Options</h2>
+<form id="options">
+  <input type="checkbox" name="isActivated" checked>
+  Display a notification every
+  <select name="frequency">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>10</option>
+    <option>15</option>
+    <option>20</option>
+    <option>25</option>
+    <option>30</option>
+  </select>
+  minute(s). <br />
+  GitHub Username: <input type="text" name="login" size="15"/> <br />
+  GitHub Token: <input type="text" name="token" size="40"/>
+</form>

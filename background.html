@@ -1,0 +1,180 @@
+<!--
+A background page that manages notifications for GetHub.
+
+Copyright (C) 2011 Puneeth Chaganti <punchagan+gethub@gmail.com>
+Copyright (C) 2011 Thomas Stephen Lee <lee.iitb@gmail.com>
+
+This file is part of GetHub.
+
+GetHub is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+GetHub is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with GetHub.  If not, see <http://www.gnu.org/licenses/>.
+
+A portion of the code in this file is based on sample extensions
+for chromium, news_a11y, available at
+http://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/extensions/news_a11y/
+and notifications, available at
+http://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/api/notifications/
+whose license is available at 
+http://code.google.com/google_bsd_license.html 
+-->
+
+<script>
+
+// Feed URL.
+// The XMLHttpRequest object that tries to load and parse the feed.
+var req;
+
+function main() {
+  var feedUrl = 'https://github.com/' + localStorage.login + '.private.atom?token=' + localStorage.token;
+  req = new XMLHttpRequest();
+  req.onload = handleResponse;
+  req.onerror = handleError;
+  req.open("GET", feedUrl, true);
+  req.send(null);
+}
+
+// Handles feed parsing errors.
+function handleFeedParsingFailed(error) {
+    show('Error', error )
+}
+
+// Handles errors during the XMLHttpRequest.
+function handleError() {
+  handleFeedParsingFailed('Failed to fetch RSS feed.');
+}
+
+// Handles parsing the feed data we got back from XMLHttpRequest.
+function handleResponse() {
+  var doc = req.responseXML;
+  if (!doc) {
+      handleFeedParsingFailed("Didn't get any feed. Did you set a valid username/token?");
+    return;
+  }
+  buildPreview(doc);
+}
+
+// The maximum number of feed items to show in the preview.
+var maxFeedItems = 999;
+
+function buildPreview(doc) {
+  // Get the link to the feed source.
+  var link = doc.getElementsByTagName("link");
+  var parentTag = link[0].parentNode.tagName;
+  var lastDate = new Date(localStorage.lastPublished)
+
+  var entries = doc.getElementsByTagName('entry');
+  if (entries.length == 0) {
+    entries = doc.getElementsByTagName('item');
+  }
+  var count = Math.min(entries.length, maxFeedItems);
+// For each entry
+  for (var i = 0; i < count; i++) {
+    item = entries.item(i);
+
+    // Grab the title for the feed item.
+    var itemTitle = item.getElementsByTagName('title')[0];
+    if (itemTitle) {
+      itemTitle = itemTitle.textContent;
+    } else {
+      itemTitle = "Unknown title";
+    }
+
+    // Grab the publish date for the feed item.
+    var itemPublished = item.getElementsByTagName('published')[0];
+    if (itemPublished) {
+      itemPublished = itemPublished.textContent;
+    } else {
+      itemPublished = "No Date? seriously?";
+    }
+
+    // Grab the description.
+    var itemDesc = item.getElementsByTagName('description')[0];
+    if (!itemDesc) {
+      itemDesc = item.getElementsByTagName('summary')[0];
+      if (!itemDesc) {
+        itemDesc = item.getElementsByTagName('content')[0];
+      }
+    }
+    if (itemDesc) {
+      itemDesc = itemDesc.childNodes[0].nodeValue;
+    } else {
+      itemDesc = '';
+    }
+
+      // Show a pop-up, if there are new items. Else break out of the loop.
+
+      var itemDate = new Date(itemPublished)
+      if (itemDate > lastDate ) {
+          show(itemTitle, itemPublished);
+          if (i==0){
+              localStorage.lastPublished = itemDate; // Date
+          }
+      }
+      else {
+          return;
+      }
+  }
+}
+
+/*
+  Displays a notification with the current time. Requires "notifications"
+  permission in the manifest file (or calling
+  "webkitNotifications.requestPermission" beforehand).
+*/
+function show(title,desc) {
+    var notification = webkitNotifications.createNotification(
+        "octocat-chrome.png",                      // The image.
+        title,
+        desc 
+    );
+    notification.show();
+}
+
+// Conditionally initialize the options.
+if (!localStorage.isInitialized) {
+    localStorage.isActivated = true;   // The display activation.
+    localStorage.frequency = 1;        // The display frequency, in minutes.
+    localStorage.isInitialized = true; // The option initialization.
+    localStorage.token = ''; // The initialization.
+    localStorage.login = ''; // The initialization.
+
+    var now = new Date();
+    localStorage.lastPublished = now; // Current Date
+
+    chrome.tabs.create({url: 'options.html'}); // Open options after install
+}
+
+  // Test for notification support.
+  if (webkitNotifications) {
+    // While activated, show notifications at the display frequency.
+      if (JSON.parse(localStorage.isActivated)) { show('GetHub','Active!'); }
+
+    var interval = 0; // The display interval, in minutes.
+
+    setInterval(function() {
+      interval++;
+
+      if (
+        JSON.parse(localStorage.isActivated) &&
+          localStorage.frequency <= interval
+      ) {
+        main();
+        interval = 0;
+      }
+    }, 60000);
+  } else {
+    // Show a new tab with an error message.
+    chrome.tabs.create({url: 'error.html'});
+  }
+
+</script>
