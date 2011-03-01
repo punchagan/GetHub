@@ -98,7 +98,7 @@ function buildPreview(doc) {
         // Grab the link
         var itemLink = item.getElementsByTagName('link')[0];
         if (itemLink) {
-            itemLink = itemLink.getAttribute('html');
+            itemLink = itemLink.getAttribute('href');
         } else {
             itemLink = "https://github.com";
         }
