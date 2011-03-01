@@ -97,6 +97,14 @@ function buildPreview(doc) {
             itemPublished = "No Date? seriously?";
         }
 
+        // Grab the link
+        var itemLink = item.getElementsByTagName('link')[0];
+        if (itemLink) {
+            itemLink = itemLink.getAttribute('html');
+        } else {
+            itemLink = "https://github.com";
+        }
+
         // Grab the description.
         var itemDesc = item.getElementsByTagName('description')[0];
         if (!itemDesc) {
@@ -115,7 +123,7 @@ function buildPreview(doc) {
 
         var itemDate = new Date(itemPublished)
         if (itemDate > lastDate ) {
-            show(itemTitle, itemPublished);
+            show(itemTitle, itemPublished, itemLink);
             if (i==0){
                 localStorage.lastPublished = itemDate; // Date
             }
@@ -131,13 +139,19 @@ function buildPreview(doc) {
   permission in the manifest file (or calling
   "webkitNotifications.requestPermission" beforehand).
 */
-function show(title,desc) {
+function show(title,desc,link) {
     var notification = webkitNotifications.createNotification(
         "octocat-chrome.png",                      // The image.
         title,
         desc 
     );
     notification.show();
+    if (link == undefined) {
+        notification.onclick = function () { chrome.tabs.create({url: 'https://github.com/punchagan/GetHub'}); };
+    }
+    else {
+        notification.onclick = function () { chrome.tabs.create({url: link}); };
+    }
 }
 
 // Conditionally initialize the options.
