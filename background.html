@@ -63,7 +63,13 @@ var maxFeedItems = 999;
 
 function buildPreview(doc) {
     // Get the link to the feed source.
-    var lastDate = new Date(localStorage.lastPublished);
+
+    if (localStorage.lastPublished == '') {
+        var lastDate = undefined;
+    }
+    else {
+        var lastDate = new Date(localStorage.lastPublished);
+    }
 
     var entries = doc.getElementsByTagName('entry');
     if (entries.length == 0) {
@@ -113,6 +119,13 @@ function buildPreview(doc) {
         // Show a pop-up, if there are new items. Else break out of the loop.
 
         var itemDate = new Date(itemPublished)
+
+        if (lastDate == undefined) {
+            show(itemTitle, itemDate.toLocaleString(), itemLink);
+            localStorage.lastPublished = itemDate; // Date
+            return  // Return after showing the first item.
+        };
+
         if (itemDate > lastDate ) {
             show(itemTitle, itemDate.toLocaleString(), itemLink);
             if (i==0){
@@ -157,9 +170,7 @@ if (!localStorage.isInitialized) {
     localStorage.isInitialized = true; // The option initialization.
     localStorage.token = ''; // The initialization.
     localStorage.login = ''; // The initialization.
-
-    var now = new Date();
-    localStorage.lastPublished = now; // Current Date
+    localStorage.lastPublished = ''; // Intialize
 
     chrome.tabs.create({url: 'options.html'}); // Open options after install
 }
