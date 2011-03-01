@@ -68,8 +68,6 @@ var maxFeedItems = 999;
 
 function buildPreview(doc) {
     // Get the link to the feed source.
-    var link = doc.getElementsByTagName("link");
-    var parentTag = link[0].parentNode.tagName;
     var lastDate = new Date(localStorage.lastPublished)
 
     var entries = doc.getElementsByTagName('entry');
