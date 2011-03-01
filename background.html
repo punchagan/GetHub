@@ -99,8 +99,6 @@ function buildPreview(doc) {
         var itemLink = item.getElementsByTagName('link')[0];
         if (itemLink) {
             itemLink = itemLink.getAttribute('href');
-        } else {
-            itemLink = "https://github.com";
         }
 
         // Grab the description.
@@ -143,19 +141,24 @@ function show(title,desc,link) {
         title,
         desc 
     );
-    notification.show();
     if (link == undefined) {
-        notification.onclick = function () { chrome.tabs.create({url: 'https://github.com/punchagan/GetHub'}); };
+        link = 'https://github.com/punchagan/GetHub'
     }
-    else {
-        notification.onclick = function () { chrome.tabs.create({url: link}); };
-    }
+    notification.onclick = function () { 
+        chrome.tabs.create({url: link}); 
+        notification.cancel();
+    };
+    notification.ondisplay = function () {
+        setTimeout(function () { notification.cancel() }, localStorage.timeOut * 1000);
+    };
+    notification.show();
 }
 
 // Conditionally initialize the options.
 if (!localStorage.isInitialized) {
     localStorage.isActivated = true;   // The display activation.
     localStorage.frequency = 1;        // The display frequency, in minutes.
+    localStorage.timeOut = 5;        // The display notification timeOut, in seconds
     localStorage.isInitialized = true; // The option initialization.
     localStorage.token = ''; // The initialization.
     localStorage.login = ''; // The initialization.
