@@ -35,12 +35,12 @@ http://code.google.com/google_bsd_license.html
 var req;
 
 function main() {
-  var feedUrl = 'https://github.com/' + localStorage.login + '.private.atom?token=' + localStorage.token;
-  req = new XMLHttpRequest();
-  req.onload = handleResponse;
-  req.onerror = handleError;
-  req.open("GET", feedUrl, true);
-  req.send(null);
+    var feedUrl = 'https://github.com/' + localStorage.login + '.private.atom?token=' + localStorage.token;
+    req = new XMLHttpRequest();
+    req.onload = handleResponse;
+    req.onerror = handleError;
+    req.open("GET", feedUrl, true);
+    req.send(null);
 }
 
 // Handles feed parsing errors.
@@ -50,80 +50,80 @@ function handleFeedParsingFailed(error) {
 
 // Handles errors during the XMLHttpRequest.
 function handleError() {
-  handleFeedParsingFailed('Failed to fetch RSS feed.');
+    handleFeedParsingFailed('Failed to fetch RSS feed.');
 }
 
 // Handles parsing the feed data we got back from XMLHttpRequest.
 function handleResponse() {
-  var doc = req.responseXML;
-  if (!doc) {
-      handleFeedParsingFailed("Didn't get any feed. Did you set a valid username/token?");
-    return;
-  }
-  buildPreview(doc);
+    var doc = req.responseXML;
+    if (!doc) {
+        handleFeedParsingFailed("Didn't get any feed. Did you set a valid username/token?");
+        return;
+    }
+    buildPreview(doc);
 }
 
 // The maximum number of feed items to show in the preview.
 var maxFeedItems = 999;
 
 function buildPreview(doc) {
-  // Get the link to the feed source.
-  var link = doc.getElementsByTagName("link");
-  var parentTag = link[0].parentNode.tagName;
-  var lastDate = new Date(localStorage.lastPublished)
+    // Get the link to the feed source.
+    var link = doc.getElementsByTagName("link");
+    var parentTag = link[0].parentNode.tagName;
+    var lastDate = new Date(localStorage.lastPublished)
 
-  var entries = doc.getElementsByTagName('entry');
-  if (entries.length == 0) {
-    entries = doc.getElementsByTagName('item');
-  }
-  var count = Math.min(entries.length, maxFeedItems);
-// For each entry
-  for (var i = 0; i < count; i++) {
-    item = entries.item(i);
-
-    // Grab the title for the feed item.
-    var itemTitle = item.getElementsByTagName('title')[0];
-    if (itemTitle) {
-      itemTitle = itemTitle.textContent;
-    } else {
-      itemTitle = "Unknown title";
+    var entries = doc.getElementsByTagName('entry');
+    if (entries.length == 0) {
+        entries = doc.getElementsByTagName('item');
     }
+    var count = Math.min(entries.length, maxFeedItems);
+    // For each entry
+    for (var i = 0; i < count; i++) {
+        item = entries.item(i);
 
-    // Grab the publish date for the feed item.
-    var itemPublished = item.getElementsByTagName('published')[0];
-    if (itemPublished) {
-      itemPublished = itemPublished.textContent;
-    } else {
-      itemPublished = "No Date? seriously?";
+        // Grab the title for the feed item.
+        var itemTitle = item.getElementsByTagName('title')[0];
+        if (itemTitle) {
+            itemTitle = itemTitle.textContent;
+        } else {
+            itemTitle = "Unknown title";
+        }
+
+        // Grab the publish date for the feed item.
+        var itemPublished = item.getElementsByTagName('published')[0];
+        if (itemPublished) {
+            itemPublished = itemPublished.textContent;
+        } else {
+            itemPublished = "No Date? seriously?";
+        }
+
+        // Grab the description.
+        var itemDesc = item.getElementsByTagName('description')[0];
+        if (!itemDesc) {
+            itemDesc = item.getElementsByTagName('summary')[0];
+            if (!itemDesc) {
+                itemDesc = item.getElementsByTagName('content')[0];
+            }
+        }
+        if (itemDesc) {
+            itemDesc = itemDesc.childNodes[0].nodeValue;
+        } else {
+            itemDesc = '';
+        }
+
+        // Show a pop-up, if there are new items. Else break out of the loop.
+
+        var itemDate = new Date(itemPublished)
+        if (itemDate > lastDate ) {
+            show(itemTitle, itemPublished);
+            if (i==0){
+                localStorage.lastPublished = itemDate; // Date
+            }
+        }
+        else {
+            return;
+        }
     }
-
-    // Grab the description.
-    var itemDesc = item.getElementsByTagName('description')[0];
-    if (!itemDesc) {
-      itemDesc = item.getElementsByTagName('summary')[0];
-      if (!itemDesc) {
-        itemDesc = item.getElementsByTagName('content')[0];
-      }
-    }
-    if (itemDesc) {
-      itemDesc = itemDesc.childNodes[0].nodeValue;
-    } else {
-      itemDesc = '';
-    }
-
-      // Show a pop-up, if there are new items. Else break out of the loop.
-
-      var itemDate = new Date(itemPublished)
-      if (itemDate > lastDate ) {
-          show(itemTitle, itemPublished);
-          if (i==0){
-              localStorage.lastPublished = itemDate; // Date
-          }
-      }
-      else {
-          return;
-      }
-  }
 }
 
 /*
@@ -154,27 +154,27 @@ if (!localStorage.isInitialized) {
     chrome.tabs.create({url: 'options.html'}); // Open options after install
 }
 
-  // Test for notification support.
-  if (webkitNotifications) {
+// Test for notification support.
+if (webkitNotifications) {
     // While activated, show notifications at the display frequency.
-      if (JSON.parse(localStorage.isActivated)) { show('GetHub','Active!'); }
+    if (JSON.parse(localStorage.isActivated)) { show('GetHub','Active!'); }
 
     var interval = 0; // The display interval, in minutes.
 
     setInterval(function() {
-      interval++;
+        interval++;
 
-      if (
-        JSON.parse(localStorage.isActivated) &&
-          localStorage.frequency <= interval
-      ) {
-        main();
-        interval = 0;
-      }
+        if (
+            JSON.parse(localStorage.isActivated) &&
+                localStorage.frequency <= interval
+        ) {
+            main();
+            interval = 0;
+        }
     }, 60000);
-  } else {
+} else {
     // Show a new tab with an error message.
     chrome.tabs.create({url: 'error.html'});
-  }
+}
 
 </script>
