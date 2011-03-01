@@ -68,7 +68,7 @@ var maxFeedItems = 999;
 
 function buildPreview(doc) {
     // Get the link to the feed source.
-    var lastDate = new Date(localStorage.lastPublished)
+    var lastDate = new Date(localStorage.lastPublished);
 
     var entries = doc.getElementsByTagName('entry');
     if (entries.length == 0) {
@@ -119,7 +119,7 @@ function buildPreview(doc) {
 
         var itemDate = new Date(itemPublished)
         if (itemDate > lastDate ) {
-            show(itemTitle, itemPublished, itemLink);
+            show(itemTitle, itemDate.toLocaleString(), itemLink);
             if (i==0){
                 localStorage.lastPublished = itemDate; // Date
             }
