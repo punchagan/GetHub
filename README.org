@@ -18,7 +18,7 @@ To start using GetHub,
 
 * TO-DO
 
-  1. Make the Notifications "clickable". 
-  2. I couldn't justify myself paying the one-time verification fee
+  1. I couldn't justify myself paying the one-time verification fee
      ($5) to Google. Might pay it, once I see more people using this.
      Sponsorship welcome. ;)
+
