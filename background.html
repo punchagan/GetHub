@@ -172,14 +172,13 @@ if (!localStorage.isInitialized) {
     localStorage.login = ''; // The initialization.
     localStorage.lastPublished = ''; // Intialize
 
+    show('GetHub','Installed!');
     chrome.tabs.create({url: 'options.html'}); // Open options after install
 }
 
 // Test for notification support.
 if (webkitNotifications) {
     // While activated, show notifications at the display frequency.
-    if (JSON.parse(localStorage.isActivated)) { show('GetHub','Active!'); }
-
     var interval = 0; // The display interval, in minutes.
 
     setInterval(function() {
