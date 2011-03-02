@@ -72,69 +72,75 @@ function buildPreview(doc) {
     }
 
     var entries = doc.getElementsByTagName('entry');
-    if (entries.length == 0) {
-        entries = doc.getElementsByTagName('item');
-    }
     var count = Math.min(entries.length, maxFeedItems);
     // For each entry
     for (var i = 0; i < count; i++) {
         item = entries.item(i);
 
-        // Grab the title for the feed item.
-        var itemTitle = item.getElementsByTagName('title')[0];
-        if (itemTitle) {
-            itemTitle = itemTitle.textContent;
-        } else {
-            itemTitle = "Unknown title";
-        }
-
         // Grab the publish date for the feed item.
         var itemPublished = item.getElementsByTagName('published')[0];
-        if (itemPublished) {
-            itemPublished = itemPublished.textContent;
-        } else {
-            itemPublished = "No Date? seriously?";
-        }
-
-        // Grab the link
-        var itemLink = item.getElementsByTagName('link')[0];
-        if (itemLink) {
-            itemLink = itemLink.getAttribute('href');
-        }
-
-        // Grab the description.
-        var itemDesc = item.getElementsByTagName('description')[0];
-        if (!itemDesc) {
-            itemDesc = item.getElementsByTagName('summary')[0];
-            if (!itemDesc) {
-                itemDesc = item.getElementsByTagName('content')[0];
-            }
-        }
-        if (itemDesc) {
-            itemDesc = itemDesc.childNodes[0].nodeValue;
-        } else {
-            itemDesc = '';
-        }
-
-        // Show a pop-up, if there are new items. Else break out of the loop.
+        itemPublished = itemPublished.textContent;
 
         var itemDate = new Date(itemPublished)
 
+        // Check if the item is newer; if not, return!
+        if (lastDate != undefined && itemDate <= lastDate) {
+            return;
+        };
+
+        // Grab the title for the feed item.
+        var itemTitle = item.getElementsByTagName('title')[0];
+        itemTitle = itemTitle.textContent;
+
+        // Grab the link
+        var itemLink = item.getElementsByTagName('link')[0];
+        itemLink = itemLink.getAttribute('href');
+
+        // Grab the description.
+        var itemDesc = item.getElementsByTagName('content')[0];
+        itemDesc = itemDesc.textContent;
+        
+        itemDesc = itemDesc.replace(/<blockquote>/g, " -- "); // Replace blockquote with dash
+        itemDesc = itemDesc.replace(/<\/blockquote>/g, " || "); // Replace /blockquote with ;;
+        itemDesc = itemDesc.replace(/<.*?>/g, ""); // Strip out all other tags
+        itemDesc = itemDesc.replace(/\s+/g, " "); // Replace multiple spaces with one
+        itemDesc = itemDesc.replace(/(^\s*--\s*|\s*\|\|\s*$)/g, " "); // Strip dashes 
+        itemDesc = itemDesc.replace("&quot;", "'"); // Replace quotes 
+
+        // Grab the event type. 
+        var itemEvent = item.getElementsByTagName('id')[0];
+        itemEvent = itemEvent.textContent.replace('/',':')
+        itemEvent = itemEvent.split(':')[2]
+
+        // All events are
+        // CommitCommentEvent, CreateEvent, FollowEvent, ForkEvent, 
+        // GollumEvent, IssuesEvent, PullRequestEvent, PushEvent, 
+        // WatchEvent
+
+        var events = ["CommitCommentEvent", "CreateEvent", "FollowEvent",
+                      "IssuesEvent", "PullRequestEvent", "PushEvent", 
+                      "WatchEvent"]
+
+        if ( events.indexOf(itemEvent)>=0 ) {
+            itemText = itemDesc;
+        } else {
+            itemText = itemDate.toLocaleString();
+        }
+        
+        // Show a pop-up.
+
         if (lastDate == undefined) {
-            show(itemTitle, itemDate.toLocaleString(), itemLink);
+            show(itemTitle, itemText , itemLink);
             localStorage.lastPublished = itemDate; // Date
             return  // Return after showing the first item.
         };
 
-        if (itemDate > lastDate ) {
-            show(itemTitle, itemDate.toLocaleString(), itemLink);
-            if (i==0){
-                localStorage.lastPublished = itemDate; // Date
-            }
-        }
-        else {
-            return;
-        }
+        show(itemTitle, itemText, itemLink);
+
+        if (i==0) {
+            localStorage.lastPublished = itemDate; // Save latest date
+        };
+        
     }
 }
 
