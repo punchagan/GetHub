@@ -156,7 +156,7 @@ function show(title,desc,link) {
         desc 
     );
     if (link == undefined) {
-        link = 'https://github.com/punchagan/GetHub'
+        link = 'https://github.com/'
     }
     notification.onclick = function () { 
         chrome.tabs.create({url: link}); 
@@ -178,7 +178,7 @@ if (!localStorage.isInitialized) {
     localStorage.login = ''; // The initialization.
     localStorage.lastPublished = ''; // Intialize
 
-    show('GetHub','Installed!');
+    show('GetHub','Installed! || Set username and token');
     chrome.tabs.create({url: 'options.html'}); // Open options after install
 }
 
