@@ -128,6 +128,11 @@ function buildPreview(doc) {
         // Grab the title for the feed item.
         var itemTitle = item.getElementsByTagName('title')[0];
         itemTitle = itemTitle.textContent;
+        var userRegex = new RegExp('^' + localStorage.login + ' | ' + 
+                                   localStorage.login + ' | ' + 
+                                   localStorage.login + '$', 'g')
+
+        itemTitle = itemTitle.replace(userRegex, " you "); // Replace quotes 
 
         // Grab the link
         var itemLink = item.getElementsByTagName('link')[0];
@@ -143,6 +148,7 @@ function buildPreview(doc) {
         itemDesc = itemDesc.replace(/\s+/g, " "); // Replace multiple spaces with one
         itemDesc = itemDesc.replace(/(^\s*--\s*|\s*\|\|\s*$)/g, " "); // Strip dashes 
         itemDesc = itemDesc.replace("&quot;", "'"); // Replace quotes 
+        itemDesc = itemDesc.replace(userRegex, " you "); // Replace username
 
         // Grab the event type. 
         var itemEvent = item.getElementsByTagName('id')[0];
