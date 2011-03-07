@@ -61,6 +61,32 @@ function handleResponse() {
 // The maximum number of feed items to show in the preview.
 var maxFeedItems = 999;
 
+function getItemDate(item) {
+    var itemPublished = item.getElementsByTagName('published')[0];
+    itemPublished = itemPublished.textContent;
+    
+    var itemDate = new Date(itemPublished)
+    return itemDate
+}
+
+function sortEntries(a, b){
+    return getItemDate(b) - getItemDate(a)
+}
+
+function getActions() {
+    var feedUrl = 'https://github.com/' + localStorage.login + '.private.actor.atom?token=' + localStorage.token;
+    req1 = new XMLHttpRequest();
+    req1.open("GET", feedUrl, false);
+    req1.send(null);
+
+    var doc = req1.responseXML;
+    if (!doc) {
+        show('Error', "Didn't get your actions.");
+        return;
+    }
+    return doc.getElementsByTagName('entry');
+}
+
 function buildPreview(doc) {
     // Get the link to the feed source.
 
@@ -72,16 +98,27 @@ function buildPreview(doc) {
     }
 
     var entries = doc.getElementsByTagName('entry');
-    var count = Math.min(entries.length, maxFeedItems);
+
+    var all = new Array(entries.length);
+
+    var index = 0;
+    for (i = 0; i < entries.length; i++)
+        all[index++] = entries[i];
+
+    if (JSON.parse(localStorage.showActions)) {
+        var actions = new getActions();
+        for (i = 0; i < actions.length; i++)
+            all[index++] = actions[i];
+        all.sort(sortEntries)
+    }
+
+    var count = Math.min(all.length, maxFeedItems);
     // For each entry
     for (var i = 0; i < count; i++) {
-        item = entries.item(i);
+        item = all[i];
 
         // Grab the publish date for the feed item.
-        var itemPublished = item.getElementsByTagName('published')[0];
-        itemPublished = itemPublished.textContent;
-
-        var itemDate = new Date(itemPublished)
+        var itemDate = new getItemDate(item)
 
         // Check if the item is newer; if not, return!
         if (lastDate != undefined && itemDate <= lastDate) {
@@ -177,6 +214,7 @@ if (!localStorage.isInitialized) {
     localStorage.token = ''; // The initialization.
     localStorage.login = ''; // The initialization.
     localStorage.lastPublished = ''; // Intialize
+    localStorage.showActions = false;   // The initialization.
 
     show('GetHub','Installed! || Set username and token');
     chrome.tabs.create({url: 'options.html'}); // Open options after install
