@@ -1,6 +1,6 @@
 {
   "name": "GetHub",
-  "version": "1.0.2",
+  "version": "1.1",
   "description": "Displays pop-ups for new updates in your Github NewsFeed",
   "icons": { "48": "octocat-chrome.png" },
   "options_page": "options.html",

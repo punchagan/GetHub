@@ -22,4 +22,7 @@ and who keep checking for updates, a dozen times every hour. :)
   3. You may also set the frequency at which you wish to check for new
      updates and the notification display time.
 
+  4. Optionally, you can also enable the option of being notified for
+     your own actions.
+
 
