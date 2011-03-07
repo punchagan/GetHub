@@ -16,7 +16,8 @@ and who keep checking for updates, a dozen times every hour. :)
      2. install it from the [[https://github.com/punchagan/GetHub][git repository]].  Follow the steps described
         in #4 of the *Create and load and extension* [[http://code.google.com/chrome/extensions/getstarted.html][section]]
        
-  2. Add your GitHub username and token to GetHub's options.  
+  2. Add your GitHub username and token to GetHub's options.  You can
+     find your token [[https://github.com/account#admin_bucket][here]], once you login to your account. 
 
   3. You may also set the frequency at which you wish to check for new
      updates and the notification display time.
