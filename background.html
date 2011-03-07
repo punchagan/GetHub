@@ -147,7 +147,7 @@ function buildPreview(doc) {
         itemDesc = itemDesc.replace(/<.*?>/g, ""); // Strip out all other tags
         itemDesc = itemDesc.replace(/\s+/g, " "); // Replace multiple spaces with one
         itemDesc = itemDesc.replace(/(^\s*--\s*|\s*\|\|\s*$)/g, " "); // Strip dashes 
-        itemDesc = itemDesc.replace("&quot;", "'"); // Replace quotes 
+        itemDesc = itemDesc.replace(/&quot;/g, "'"); // Replace quotes 
         itemDesc = itemDesc.replace(userRegex, " you "); // Replace username
 
         // Grab the event type. 
