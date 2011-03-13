@@ -128,8 +128,8 @@ function buildPreview(doc) {
         // Grab the title for the feed item.
         var itemTitle = item.getElementsByTagName('title')[0];
         itemTitle = itemTitle.textContent;
-        var userRegex = new RegExp('^' + localStorage.login + ' | ' + 
-                                   localStorage.login + ' | ' + 
+        var userRegex = new RegExp('^' + localStorage.login + '\\s|\\s' + 
+                                   localStorage.login + '\\s|\\s' + 
                                    localStorage.login + '$', 'g')
 
         itemTitle = itemTitle.replace(userRegex, " you "); // Replace quotes 
