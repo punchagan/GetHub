@@ -51,9 +51,11 @@ function handleError() {
 // Handles parsing the feed data we got back from XMLHttpRequest.
 function handleResponse() {
     var doc = req.responseXML;
-    if (!doc) {
-        show('Error', "Didn't get any feed. Did you set a valid username/token?");
+    if (!doc && (req.status == 404 || req.status == 401))  {
+        show('Error', "Didn't get a feed. Did you set a valid username/token?");
         return;
+    } else {
+        console.log('Bad Bad Donut.');
     }
     buildPreview(doc);
 }
