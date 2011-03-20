@@ -53,12 +53,12 @@ function handleResponse() {
     var doc = req.responseXML;
     if (!doc) {
         if (req.status == 404 || req.status == 401) {
-        show('Error', "Didn't get a feed. Did you set a valid username/token?");
+            show('Error', "Didn't get a feed. Did you set a valid username/token?");
         } else {
             console.log('Bad Bad Donut.');
         }
         return;
-    } 
+    }
     buildPreview(doc);
 }
 
