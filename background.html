@@ -161,14 +161,14 @@ function buildPreview(doc) {
         itemEvent = itemEvent.textContent.replace('/',':')
         itemEvent = itemEvent.split(':')[2]
 
-        // All events are
-        // CommitCommentEvent, CreateEvent, FollowEvent, ForkEvent, 
-        // GollumEvent, IssuesEvent, PullRequestEvent, PushEvent, 
-        // WatchEvent
+        // All events are 
+        // CommitCommentEvent, CreateEvent, FollowEvent, ForkEvent,
+        // GollumEvent, GistEvent, IssuesEvent, PullRequestEvent,
+        // PushEvent, WatchEvent
 
         var events = ["CommitCommentEvent", "CreateEvent", "FollowEvent",
-                      "IssuesEvent", "PullRequestEvent", "PushEvent", 
-                      "WatchEvent"]
+                      "GistEvent", "IssuesEvent", "PullRequestEvent", 
+                      "PushEvent", "WatchEvent"]
 
         if ( events.indexOf(itemEvent)>=0 ) {
             itemText = itemDesc;
