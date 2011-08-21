@@ -236,7 +236,7 @@ if (!localStorage.isInitialized) {
 if (webkitNotifications) {
     // While activated, show notifications at the display frequency.
     var interval = 0; // The display interval, in minutes.
-
+    main();
     setInterval(function() {
         interval++;
 

@@ -1,6 +1,6 @@
 {
   "name": "GetHub",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Displays Desktop notifications for new updates in your Github NewsFeed",
   "icons": { "48": "octocat-chrome.png", "128": "octocat-chrome.png" },
   "options_page": "options.html",
