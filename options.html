@@ -22,7 +22,7 @@ along with GetHub.  If not, see <http://www.gnu.org/licenses/>.
 A portion of the code in this file is based on chrome's sample
 extension, notifications, available at
 http://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/api/notifications/
-whose license is available at 
+whose license is available at
 http://code.google.com/google_bsd_license.html
 -->
 
@@ -68,6 +68,7 @@ http://code.google.com/google_bsd_license.html
     options.timeOut.value = localStorage.timeOut;
                                            // The display notification timeOut, in seconds.
     options.login.value = localStorage.login; // The user's login.
+    options.hostname.value = localStorage.hostname; // The hostname.
     options.token.value = localStorage.token; // The user's token.
     options.showActions.checked = JSON.parse(localStorage.showActions);
                                            // Show user's actions.
@@ -90,6 +91,10 @@ http://code.google.com/google_bsd_license.html
 
     options.login.onchange = function() {
       localStorage.login = options.login.value;
+    };
+
+    options.hostname.onchange = function() {
+      localStorage.hostname = options.hostname.value;
     };
 
     options.token.onchange = function() {
@@ -123,6 +128,7 @@ http://code.google.com/google_bsd_license.html
   </select>
   minute(s). <br />
   Notification TimeOut: <input type="text" name="timeOut" size="2"/> seconds(s)<br />
+  Hostname: <input type="text" name="hostname" size="15"/> [Change for GitHub Enterprise]<br />
   GitHub Username: <input type="text" name="login" size="15"/> <br />
   GitHub Token: <input type="text" name="token" size="40"/> <br />
   Show your actions: <input type="checkbox" name="showActions">

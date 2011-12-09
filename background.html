@@ -35,7 +35,7 @@ http://code.google.com/google_bsd_license.html
 var req;
 
 function main() {
-    var feedUrl = 'https://github.com/' + localStorage.login + '.private.atom?token=' + localStorage.token;
+    var feedUrl = localStorage.hostname + localStorage.login + '.private.atom?token=' + localStorage.token;
     req = new XMLHttpRequest();
     req.onload = handleResponse;
     req.onerror = handleError;
@@ -78,7 +78,7 @@ function sortEntries(a, b){
 }
 
 function getActions() {
-    var feedUrl = 'https://github.com/' + localStorage.login + '.private.actor.atom?token=' + localStorage.token;
+    var feedUrl = localStorage.hostname + localStorage.login + '.private.actor.atom?token=' + localStorage.token;
     req1 = new XMLHttpRequest();
     req1.open("GET", feedUrl, false);
     req1.send(null);
@@ -225,6 +225,7 @@ if (!localStorage.isInitialized) {
     localStorage.isInitialized = true; // The option initialization.
     localStorage.token = ''; // The initialization.
     localStorage.login = ''; // The initialization.
+    localStorage.hostname = 'https://github.com/'
     localStorage.lastPublished = ''; // Intialize
     localStorage.showActions = false;   // The initialization.
 
