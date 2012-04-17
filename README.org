@@ -17,7 +17,9 @@ and who keep checking for updates, a dozen times every hour. :)
         in #4 of the *Create and load and extension* [[http://code.google.com/chrome/extensions/getstarted.html][section]]
        
   2. Add your GitHub username and token to GetHub's options.  You can
-     find your token [[https://github.com/account#admin_bucket][here]], once you login to your account. 
+     find your github token either in your local ~/.gitconfig file or 
+     in the Github news feed URL (at the top right of github.com when
+     logged in).
 
   3. You may also set the frequency at which you wish to check for new
      updates and the notification display time.
