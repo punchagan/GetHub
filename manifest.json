@@ -1,12 +1,20 @@
 {
   "name": "GetHub",
-  "version": "1.2.4",
+  "version": "1.2.5",
+  "manifest_version": 2,
   "description": "Displays Desktop notifications for new updates in your Github NewsFeed",
   "icons": { "48": "octocat-chrome.png", "128": "octocat-chrome.png" },
   "options_page": "options.html",
-  "background_page": "background.html",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "permissions": [
     "notifications",
+    "alarms",
     "https://github.com/*"
+  ],
+  "web_accessible_resources": [
+        "octocat-chrome.png"
   ]
 }
