@@ -255,6 +255,9 @@ chrome.runtime.onInstalled.addListener(
     }
 );
 
+// Hook up alarms and stuff, on start up.
+chrome.runtime.onStartup.addListener(initialize);
+
 var getItemDate = function (item) {
     var itemPublished = item.getElementsByTagName('published')[0];
     itemPublished = itemPublished.textContent;

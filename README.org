@@ -1,5 +1,5 @@
 #+TITLE: GetHub README
-#+OPTIONS: toc:nil num:nil 
+#+OPTIONS: toc:nil num:nil
 
 GetHub is a Chrome extension that displays desktop notifications for
 new updates in your Github NewsFeed.
@@ -11,20 +11,17 @@ and who keep checking for updates, a dozen times every hour. :)
 
   1. Install GetHub.
 
-     1. You can get it from the [[https://chrome.google.com/webstore/detail/jnbbnckmmoohlahncbahecdjcpomkahh?hl=en-US#][store]]  OR 
+     1. You can get it from the [[https://chrome.google.com/webstore/detail/jnbbnckmmoohlahncbahecdjcpomkahh?hl=en-US#][store]]  OR
 
      2. install it from the [[https://github.com/punchagan/GetHub][git repository]].  Follow the steps described
         in #4 of the *Create and load and extension* [[http://code.google.com/chrome/extensions/getstarted.html][section]]
-       
+
   2. Add your GitHub username and token to GetHub's options.  You can
-     find your github token either in your local ~/.gitconfig file or 
-     in the Github news feed URL (at the top right of github.com when
-     logged in).
+     find your github token in the Github news feed URL (at the top
+     right of github.com when logged in).
 
   3. You may also set the frequency at which you wish to check for new
      updates and the notification display time.
 
   4. Optionally, you can also enable the option of being notified for
      your own actions.
-
-
